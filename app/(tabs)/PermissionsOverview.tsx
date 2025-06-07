@@ -1,3 +1,5 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   ScrollView,
@@ -6,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import MainLayout from "../../components/MainLayout";
 import { permissionsOverview } from "../data/mockData";
 
 const iconMap = {
@@ -23,100 +26,105 @@ const levelColors = {
 
 export default function PermissionsOverview() {
   const { counts, groups } = permissionsOverview;
-
+  const navigation = useNavigation();
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Permissions Overview</Text>
-      </View>
-
-      <View style={styles.summaryRow}>
-        <View style={styles.summaryCard}>
-          <Text style={[styles.summaryCount, { color: "#d32f2f" }]}>
-            {counts.critical}
-          </Text>
-          <Text style={[styles.summaryLabel, { color: "#d32f2f" }]}>
-            ⚠️ Critical
-          </Text>
-        </View>
-        <View style={styles.summaryCard}>
-          <Text style={[styles.summaryCount, { color: "#f9a825" }]}>
-            {counts.moderate}
-          </Text>
-          <Text style={[styles.summaryLabel, { color: "#f9a825" }]}>
-            👁️ Moderate
-          </Text>
-        </View>
-        <View style={styles.summaryCard}>
-          <Text style={[styles.summaryCount, { color: "#388e3c" }]}>
-            {counts.normal}
-          </Text>
-          <Text style={[styles.summaryLabel, { color: "#388e3c" }]}>
-            🛡️ Normal
-          </Text>
-        </View>
-      </View>
-
-      {groups.map((grp) => (
-        <View key={grp.level}>
-          <Text
-            style={[
-              styles.levelTag,
-              {
-                backgroundColor: levelColors[grp.level].bg,
-                color: levelColors[grp.level].color,
-              },
-            ]}
+    <MainLayout current="PermissionsOverview" activeTime="N/A">
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
           >
-            {grp.level}
-          </Text>
-          <Text style={styles.levelTitle}>{grp.level} Permissions</Text>
-          <View style={styles.permissionList}>
-            {grp.permissions.map((perm) => (
-              <View
-                key={perm.name}
-                style={[
-                  styles.permissionCard,
-                  { borderLeftColor: levelColors[grp.level].border },
-                ]}
-              >
-                <View style={styles.permissionHeader}>
-                  <Text style={styles.permissionIcon}>
-                    {iconMap[perm.icon]}
-                  </Text>
-                  <Text style={styles.permissionName}>{perm.name}</Text>
-                  <Text
-                    style={[
-                      styles.permissionLevelTag,
-                      {
-                        backgroundColor: levelColors[grp.level].bg,
-                        color: levelColors[grp.level].color,
-                      },
-                    ]}
-                  >
-                    {grp.level}
-                  </Text>
-                </View>
-                <Text style={styles.permissionDesc}>{perm.desc}</Text>
-                <Text style={styles.appListLabel}>
-                  Apps using this permission ({perm.apps.length}):
-                </Text>
-                <View style={styles.appChips}>
-                  {perm.apps.map((app) => (
-                    <Text key={app} style={styles.appChip}>
-                      {app}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-            ))}
+            <Ionicons name="arrow-back" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Permissions Overview</Text>
+        </View>
+
+        <View style={styles.summaryRow}>
+          <View style={styles.summaryCard}>
+            <Text style={[styles.summaryCount, { color: "#d32f2f" }]}>
+              {counts.critical}
+            </Text>
+            <Text style={[styles.summaryLabel, { color: "#d32f2f" }]}>
+              ⚠️ Critical
+            </Text>
+          </View>
+          <View style={styles.summaryCard}>
+            <Text style={[styles.summaryCount, { color: "#f9a825" }]}>
+              {counts.moderate}
+            </Text>
+            <Text style={[styles.summaryLabel, { color: "#f9a825" }]}>
+              👁️ Moderate
+            </Text>
+          </View>
+          <View style={styles.summaryCard}>
+            <Text style={[styles.summaryCount, { color: "#388e3c" }]}>
+              {counts.normal}
+            </Text>
+            <Text style={[styles.summaryLabel, { color: "#388e3c" }]}>
+              🛡️ Normal
+            </Text>
           </View>
         </View>
-      ))}
-    </ScrollView>
+
+        {groups.map((grp) => (
+          <View key={grp.level}>
+            <Text
+              style={[
+                styles.levelTag,
+                {
+                  backgroundColor: levelColors[grp.level].bg,
+                  color: levelColors[grp.level].color,
+                },
+              ]}
+            >
+              {grp.level}
+            </Text>
+            <Text style={styles.levelTitle}>{grp.level} Permissions</Text>
+            <View style={styles.permissionList}>
+              {grp.permissions.map((perm) => (
+                <View
+                  key={perm.name}
+                  style={[
+                    styles.permissionCard,
+                    { borderLeftColor: levelColors[grp.level].border },
+                  ]}
+                >
+                  <View style={styles.permissionHeader}>
+                    <Text style={styles.permissionIcon}>
+                      {iconMap[perm.icon]}
+                    </Text>
+                    <Text style={styles.permissionName}>{perm.name}</Text>
+                    <Text
+                      style={[
+                        styles.permissionLevelTag,
+                        {
+                          backgroundColor: levelColors[grp.level].bg,
+                          color: levelColors[grp.level].color,
+                        },
+                      ]}
+                    >
+                      {grp.level}
+                    </Text>
+                  </View>
+                  <Text style={styles.permissionDesc}>{perm.desc}</Text>
+                  <Text style={styles.appListLabel}>
+                    Apps using this permission ({perm.apps.length}):
+                  </Text>
+                  <View style={styles.appChips}>
+                    {perm.apps.map((app) => (
+                      <Text key={app} style={styles.appChip}>
+                        {app}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </MainLayout>
   );
 }
 

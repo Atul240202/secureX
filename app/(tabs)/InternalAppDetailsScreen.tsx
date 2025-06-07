@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
 import {
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import MainLayout from "../../components/MainLayout";
 import { internalAppDetails } from "../data/mockData";
 
 // ---------- TYPES ----------
@@ -50,82 +52,88 @@ export default function InternalAppDetailsScreen() {
 
   if (!app) {
     return (
-      <View style={styles.container}>
-        <Text style={{ color: "red", fontSize: 16 }}>
-          App data not found for "{appName}".
-        </Text>
-      </View>
+      <MainLayout current="InstalledApps" activeTime="N/A">
+        <View style={styles.container}>
+          <Text style={{ color: "red", fontSize: 16 }}>
+            App data not found for "{appName}".
+          </Text>
+        </View>
+      </MainLayout>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>App Details</Text>
-      </View>
-
-      {/* App Summary Card */}
-      <View style={styles.card}>
-        <Text style={styles.appName}>{app.name}</Text>
-        <Text style={styles.appDesc}>{app.description}</Text>
-        <View style={getRiskBadgeStyle(app.risk)}>
-          <Text style={styles.riskText}>{app.risk} Risk</Text>
+    <MainLayout current="InstalledApps" activeTime="N/A">
+      <ScrollView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.title}>App Details</Text>
         </View>
-        <View style={styles.usageRow}>
-          <View style={styles.usageBox}>
-            <Text style={styles.usageValue}>{app.usage.dailyMinutes}m</Text>
-            <Text style={styles.usageLabel}>Daily Usage</Text>
-          </View>
-          <View style={styles.usageBox}>
-            <Text style={styles.usageValue}>{app.permissions.length}</Text>
-            <Text style={styles.usageLabel}>Permissions</Text>
-          </View>
-        </View>
-      </View>
 
-      {/* Permissions Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Permissions</Text>
-        {app.permissions.map((perm) => (
-          <View key={perm.name} style={styles.permissionItem}>
-            <Text style={styles.permissionIcon}>📌</Text>
-            <View>
-              <Text style={styles.permissionName}>{perm.name}</Text>
-              <Text style={styles.permissionDesc}>{perm.desc}</Text>
+        {/* App Summary Card */}
+        <View style={styles.card}>
+          <Text style={styles.appName}>{app.name}</Text>
+          <Text style={styles.appDesc}>{app.description}</Text>
+          <View style={getRiskBadgeStyle(app.risk)}>
+            <Text style={styles.riskText}>{app.risk} Risk</Text>
+          </View>
+          <View style={styles.usageRow}>
+            <View style={styles.usageBox}>
+              <Text style={styles.usageValue}>{app.usage.dailyMinutes}m</Text>
+              <Text style={styles.usageLabel}>Daily Usage</Text>
             </View>
-            {perm.granted && <Text style={styles.check}>✅</Text>}
+            <View style={styles.usageBox}>
+              <Text style={styles.usageValue}>{app.permissions.length}</Text>
+              <Text style={styles.usageLabel}>Permissions</Text>
+            </View>
           </View>
-        ))}
-      </View>
+        </View>
 
-      {/* Usage Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Usage Statistics</Text>
-        <Text style={styles.usageDetail}>
-          Daily Average: {app.usage.dailyMinutes} minutes
-        </Text>
-        <Text style={styles.usageDetail}>Last used: {app.usage.lastUsed}</Text>
-      </View>
-
-      {/* Suggestions Section */}
-      {app.suggestions.length > 0 && (
-        <View style={styles.suggestionsBox}>
-          <Text style={styles.sectionTitle}>Security Suggestions</Text>
-          {app.suggestions.map((sug, idx) => (
-            <Text key={idx} style={styles.suggestionText}>
-              ⚠️ {sug}
-            </Text>
+        {/* Permissions Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Permissions</Text>
+          {app.permissions.map((perm) => (
+            <View key={perm.name} style={styles.permissionItem}>
+              <Text style={styles.permissionIcon}>📌</Text>
+              <View>
+                <Text style={styles.permissionName}>{perm.name}</Text>
+                <Text style={styles.permissionDesc}>{perm.desc}</Text>
+              </View>
+              {perm.granted && <Text style={styles.check}>✅</Text>}
+            </View>
           ))}
         </View>
-      )}
-    </ScrollView>
+
+        {/* Usage Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Usage Statistics</Text>
+          <Text style={styles.usageDetail}>
+            Daily Average: {app.usage.dailyMinutes} minutes
+          </Text>
+          <Text style={styles.usageDetail}>
+            Last used: {app.usage.lastUsed}
+          </Text>
+        </View>
+
+        {/* Suggestions Section */}
+        {app.suggestions.length > 0 && (
+          <View style={styles.suggestionsBox}>
+            <Text style={styles.sectionTitle}>Security Suggestions</Text>
+            {app.suggestions.map((sug, idx) => (
+              <Text key={idx} style={styles.suggestionText}>
+                ⚠️ {sug}
+              </Text>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </MainLayout>
   );
 }
 

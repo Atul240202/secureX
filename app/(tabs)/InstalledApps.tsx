@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import MainLayout from "../../components/MainLayout";
 import { internalAppDetails } from "../data/mockData";
 
 const iconMap = {
@@ -33,56 +35,61 @@ export default function InstalledApps() {
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Installed Apps</Text>
-      </View>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search apps..."
-        value={search}
-        onChangeText={setSearch}
-      />
-      <View style={styles.appList}>
-        {filteredApps.map((app) => (
+    <MainLayout current="InstalledApps" activeTime="N/A">
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
           <TouchableOpacity
-            key={app.id}
-            style={styles.appCard}
-            onPress={() =>
-              navigation.navigate("InternalAppDetailsScreen", {
-                appName: app.id,
-              })
-            }
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
           >
-            <Text style={styles.appIcon}>{iconMap[app.icon]}</Text>
-            <View style={styles.appInfo}>
-              <View style={styles.appNameRow}>
-                <Text style={styles.appName}>{app.name}</Text>
-                <Text
-                  style={{
-                    ...styles.riskTag,
-                    backgroundColor: riskColors[app.risk].bg,
-                    color: riskColors[app.risk].color,
-                  }}
-                >
-                  {app.risk} Risk
-                </Text>
-              </View>
-              <Text style={styles.description}>{app.description}</Text>
-              <View style={styles.metaRow}>
-                <Text style={styles.metaText}>
-                  {app.permissions.length} permissions
-                </Text>
-                <Text style={styles.metaText}>• {app.usage.lastUsed}</Text>
-              </View>
-            </View>
+            <Ionicons name="arrow-back" size={24} color="#333" />
           </TouchableOpacity>
-        ))}
-      </View>
-    </ScrollView>
+          <Text style={styles.title}>Installed Apps</Text>
+        </View>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search apps..."
+          value={search}
+          onChangeText={setSearch}
+        />
+        <View style={styles.appList}>
+          {filteredApps.map((app) => (
+            <TouchableOpacity
+              key={app.id}
+              style={styles.appCard}
+              onPress={() =>
+                navigation.navigate("InternalAppDetailsScreen", {
+                  appName: app?.id,
+                })
+              }
+            >
+              <Text style={styles.appIcon}>{iconMap[app.icon]}</Text>
+              <View style={styles.appInfo}>
+                <View style={styles.appNameRow}>
+                  <Text style={styles.appName}>{app.name}</Text>
+                  <Text
+                    style={{
+                      ...styles.riskTag,
+                      backgroundColor: riskColors[app.risk].bg,
+                      color: riskColors[app.risk].color,
+                    }}
+                  >
+                    {app.risk} Risk
+                  </Text>
+                </View>
+                <Text style={styles.description}>{app.description}</Text>
+                <View style={styles.metaRow}>
+                  <Text style={styles.metaText}>
+                    {app.permissions.length} permissions
+                  </Text>
+                  <Text style={styles.metaText}>• {app.usage.lastUsed}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </MainLayout>
   );
 }
 

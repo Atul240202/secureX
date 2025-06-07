@@ -8,8 +8,8 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import MainLayout from "../../components/MainLayout";
 import { dashboardData } from "../data/dashboardData";
-
 const iconMap: Record<string, string> = {
   camera: "camera",
   chat: "chat",
@@ -22,84 +22,86 @@ export default function DashboardScreen({ navigation }) {
   const summary = dashboardData;
   const router = useRouter();
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>
-        <Icon name="shield-outline" size={28} color="#4b7bec" /> SecurX
-      </Text>
-      <Text style={styles.subtitle}>Mobile Security Dashboard</Text>
+    <MainLayout current="dashboard" activeTime="2h 37m">
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>
+          <Icon name="shield-outline" size={28} color="#4b7bec" /> SecurX
+        </Text>
+        <Text style={styles.subtitle}>Mobile Security Dashboard</Text>
 
-      <View style={styles.cardsRow}>
-        <View style={styles.card}>
-          <Icon name="cellphone" size={28} color="#4b7bec" />
-          <Text style={styles.cardNumber}>{summary.totalApps}</Text>
-          <Text style={styles.cardLabel}>Installed Apps</Text>
+        <View style={styles.cardsRow}>
+          <View style={styles.card}>
+            <Icon name="cellphone" size={28} color="#4b7bec" />
+            <Text style={styles.cardNumber}>{summary.totalApps}</Text>
+            <Text style={styles.cardLabel}>Installed Apps</Text>
+          </View>
+          <View style={[styles.card, styles.cardDanger]}>
+            <Icon name="alert-circle-outline" size={28} color="#eb3b5a" />
+            <Text style={[styles.cardNumber, { color: "#eb3b5a" }]}>
+              {summary.riskApps}
+            </Text>
+            <Text style={styles.cardLabel}>Risk Apps</Text>
+          </View>
         </View>
-        <View style={[styles.card, styles.cardDanger]}>
-          <Icon name="alert-circle-outline" size={28} color="#eb3b5a" />
-          <Text style={[styles.cardNumber, { color: "#eb3b5a" }]}>
-            {summary.riskApps}
-          </Text>
-          <Text style={styles.cardLabel}>Risk Apps</Text>
-        </View>
-      </View>
 
-      <View style={styles.timeCard}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Icon name="clock-outline" size={24} color="#20bf6b" />
-          <Text style={{ marginLeft: 8, fontSize: 18, fontWeight: "600" }}>
-            {summary.dailyScreenTime}
-          </Text>
-        </View>
-        <View style={styles.todayTag}>
-          <Text style={styles.todayText}>Today</Text>
-        </View>
-      </View>
-
-      <View style={styles.usageCard}>
-        <Text style={styles.usageTitle}>Top 5 Most Used Apps</Text>
-        {summary.mostUsedApps.map((app) => (
-          <View key={app.name} style={styles.usageRow}>
-            <Icon
-              name={iconMap[app.icon]}
-              size={22}
-              color="#333"
-              style={{ width: 30 }}
-            />
-            <Text style={{ flex: 1 }}>{app.name}</Text>
-            <View style={styles.usageBarContainer}>
-              <View
-                style={[
-                  styles.usageBar,
-                  { width: `${(app.usageMinutes / 240) * 100}%` },
-                ]}
-              />
-            </View>
-            <Text style={{ width: 40, textAlign: "right" }}>
-              {app.usageMinutes}m
+        <View style={styles.timeCard}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon name="clock-outline" size={24} color="#20bf6b" />
+            <Text style={{ marginLeft: 8, fontSize: 18, fontWeight: "600" }}>
+              {summary.dailyScreenTime}
             </Text>
           </View>
-        ))}
-      </View>
+          <View style={styles.todayTag}>
+            <Text style={styles.todayText}>Today</Text>
+          </View>
+        </View>
 
-      <View style={styles.bottomRow}>
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={() => router.push("/InstalledApps")}
-        >
-          <Icon name="shield-outline" size={20} color="#4b7bec" />
-          <Text style={styles.bottomBtnText}>View All Apps</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.bottomButton, styles.bottomButtonGreen]}
-          onPress={() => router.push("/PermissionsOverview")}
-        >
-          <Icon name="alert-circle-outline" size={20} color="#20bf6b" />
-          <Text style={[styles.bottomBtnText, { color: "#20bf6b" }]}>
-            Permissions
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View style={styles.usageCard}>
+          <Text style={styles.usageTitle}>Top 5 Most Used Apps</Text>
+          {summary.mostUsedApps.map((app) => (
+            <View key={app.name} style={styles.usageRow}>
+              <Icon
+                name={iconMap[app.icon]}
+                size={22}
+                color="#333"
+                style={{ width: 30 }}
+              />
+              <Text style={{ flex: 1 }}>{app.name}</Text>
+              <View style={styles.usageBarContainer}>
+                <View
+                  style={[
+                    styles.usageBar,
+                    { width: `${(app.usageMinutes / 240) * 100}%` },
+                  ]}
+                />
+              </View>
+              <Text style={{ width: 40, textAlign: "right" }}>
+                {app.usageMinutes}m
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.bottomRow}>
+          <TouchableOpacity
+            style={styles.bottomButton}
+            onPress={() => router.push("/InstalledApps")}
+          >
+            <Icon name="shield-outline" size={20} color="#4b7bec" />
+            <Text style={styles.bottomBtnText}>View All Apps</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.bottomButton, styles.bottomButtonGreen]}
+            onPress={() => router.push("/PermissionsOverview")}
+          >
+            <Icon name="alert-circle-outline" size={20} color="#20bf6b" />
+            <Text style={[styles.bottomBtnText, { color: "#20bf6b" }]}>
+              Permissions
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </MainLayout>
   );
 }
 
